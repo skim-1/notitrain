@@ -1,4 +1,4 @@
-import pandas as pd
+iimport pandas as pd
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import tensorflow_text as tf_text
@@ -27,13 +27,14 @@ def counter_word(text_col):
     return count
 
 
-spam_data = pd.read_csv('D:/spam_ham_dataset.csv').drop('num', axis=1).drop('label', axis=1)
-print(spam_data.groupby("label_num").describe())
+spam_data = pd.read_csv('./spam.csv')
 
-spam_data["text"] = spam_data.text.map(remove_stopwords)
+spam_data['Label'] = [1 if x == 'spam' else 0 for x in spam_data["Label"]]
 
-X = spam_data["text"]
-y = spam_data['label_num']
+spam_data["EmailText"] = spam_data["EmailText"].map(remove_stopwords)
+
+X = spam_data["EmailText"]
+y = spam_data['Label']
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -55,9 +56,9 @@ layer2 = tf.keras.layers.Dense(1, activation='sigmoid', name="output")(layer1)
 model = tf.keras.Model(inputs=[text_input], outputs=[layer2])
 
 metrics = [
-      tf.keras.metrics.BinaryAccuracy(name='accuracy'),
-      tf.keras.metrics.Precision(name='precision'),
-      tf.keras.metrics.Recall(name='recall')
+    tf.keras.metrics.BinaryAccuracy(name='accuracy'),
+    tf.keras.metrics.Precision(name='precision'),
+    tf.keras.metrics.Recall(name='recall')
 ]
 
 model.compile(optimizer='adam',
@@ -65,5 +66,3 @@ model.compile(optimizer='adam',
               metrics=metrics)
 
 model.fit(X_train, y_train, epochs=10)
-
-
