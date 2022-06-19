@@ -1,8 +1,8 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
-import tensorflow_text as tf_text
 import tensorflow_hub as tf_hub
+import tensorflow_text as tf_text
 from collections import Counter
 
 import nltk
@@ -65,4 +65,6 @@ model.compile(optimizer='adam',
               loss='binary_crossentropy',
               metrics=metrics)
 
-model.fit(X_train, y_train, epochs=10)
+
+model.fit(X_train, y_train, epochs=10, validation_data=(y_train, y_test))
+model.save("nn.h5")
