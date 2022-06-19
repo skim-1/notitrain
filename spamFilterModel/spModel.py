@@ -66,5 +66,5 @@ model.compile(optimizer='adam',
               metrics=metrics)
 
 
-model.fit(X_train, y_train, epochs=10, validation_data=(y_train, y_test))
+model.fit(X_train, y_train, epochs=10)
 model.save("nn.h5")
